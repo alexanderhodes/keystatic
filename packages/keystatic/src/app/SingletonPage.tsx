@@ -60,6 +60,8 @@ import * as Y from 'yjs';
 import { useYjs, useYjsIfAvailable } from './shell/collab';
 import { createGetPreviewPropsFromY } from '../form/preview-props-yjs';
 import { useYJsValue } from './useYJsValue';
+import { useLocalizedStringFormatter } from '@react-aria/i18n';
+import l10nMessages from './l10n/index.json';
 
 type SingletonPageProps = {
   singleton: string;
@@ -91,6 +93,7 @@ function SingletonPageInner(
   );
 
   const router = useRouter();
+  const stringFormatter = useLocalizedStringFormatter(l10nMessages);
 
   const previewHref = useMemo(() => {
     if (!singletonConfig.previewUrl) return undefined;
@@ -185,7 +188,9 @@ function SingletonPageInner(
               alignSelf="center"
             />
           ) : (
-            props.hasChanged && <Badge tone="pending">Unsaved</Badge>
+            props.hasChanged && (
+              <Badge tone="pending">{stringFormatter.format('unsaved')}</Badge>
+            )
           )}
         </Flex>
         <ActionGroup
@@ -223,7 +228,9 @@ function SingletonPageInner(
           prominence="high"
           type="submit"
         >
-          {isCreating ? 'Create' : 'Save'}
+          {isCreating
+            ? stringFormatter.format('create')
+            : stringFormatter.format('save')}
         </Button>
       </PageHeader>
       <Flex

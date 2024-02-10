@@ -5,6 +5,8 @@ import { useContext, useState } from 'react';
 import { FormFieldInputProps } from '../../api';
 import { SlugFieldContext, PathContext } from '../text/path-slug-context';
 import { validateText } from '../text/validateText';
+import { useLocalizedStringFormatter } from '@react-aria/i18n';
+import l10nMessages from '../../../app/l10n/index.json';
 
 const emptySet = new Set<string>();
 
@@ -21,6 +23,7 @@ export function SlugFieldInput(
     path.length === 1 && path[0] === slugContext?.field
       ? slugContext
       : { slugs: emptySet, glob: '*' as const };
+  const stringFormatter = useLocalizedStringFormatter(l10nMessages);
 
   const [blurredName, setBlurredName] = useState(false);
   const [blurredSlug, setBlurredSlug] = useState(false);
@@ -101,7 +104,7 @@ export function SlugFieldInput(
               });
             }}
           >
-            Regenerate
+            {stringFormatter.format('regenerate')}
           </ActionButton>
           {/* display shim to offset the error message */}
           {slugErrorMessage !== undefined && <Box height="element.xsmall" />}

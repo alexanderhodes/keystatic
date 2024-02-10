@@ -69,7 +69,7 @@ import {
 import { notFound } from './not-found';
 import { useConfig } from './shell/context';
 import { useSlugFieldInfo } from './slugs';
-import { z } from 'zod';
+import { string, z } from 'zod';
 import { LOADING, useData } from './useData';
 import {
   delDraft,
@@ -576,24 +576,24 @@ function HeaderActions(props: {
     let items: ActionType[] = [
       {
         key: 'reset',
-        label: 'Reset changes', // TODO: l10n
+        label: stringFormatter.format('resetChanges'),
         icon: historyIcon,
       },
       {
         key: 'delete',
-        label: 'Delete entry…', // TODO: l10n
+        label: stringFormatter.format('deleteEntry'),
         icon: trash2Icon,
       },
       {
         key: 'duplicate',
-        label: 'Duplicate entry…', // TODO: l10n
+        label: stringFormatter.format('duplicateEntry'),
         icon: copyPlusIcon,
       },
     ];
     if (previewHref) {
       items.push({
         key: 'preview',
-        label: 'Preview',
+        label: stringFormatter.format('preview'),
         icon: externalLinkIcon,
         href: previewHref,
         target: '_blank',
@@ -603,7 +603,7 @@ function HeaderActions(props: {
     if (viewHref) {
       items.push({
         key: 'view',
-        label: 'View on GitHub',
+        label: stringFormatter.format('viewOnGitHub'),
         icon: githubIcon,
         href: viewHref,
         target: '_blank',
@@ -612,7 +612,7 @@ function HeaderActions(props: {
     }
 
     return items;
-  }, [previewHref, viewHref]);
+  }, [previewHref, viewHref, stringFormatter]);
 
   const indicatorElement = (() => {
     if (isLoading) {
@@ -634,10 +634,10 @@ function HeaderActions(props: {
           width="scale.75"
           borderRadius="full"
         >
-          <Text visuallyHidden>Unsaved</Text>
+          <Text visuallyHidden>{stringFormatter.format('unsaved')}</Text>
         </Box>
       ) : (
-        <Badge tone="pending">Unsaved</Badge>
+        <Badge tone="pending">{stringFormatter.format('unsaved')}</Badge>
       );
     }
 
@@ -697,28 +697,28 @@ function HeaderActions(props: {
       <DialogContainer onDismiss={() => setDeleteAlertOpen(false)}>
         {deleteAlertIsOpen && (
           <AlertDialog
-            title="Delete entry"
+            title={stringFormatter.format('deleteEntry')}
             tone="critical"
-            cancelLabel="Cancel"
-            primaryActionLabel="Yes, delete"
+            cancelLabel={stringFormatter.format('cancel')}
+            primaryActionLabel={stringFormatter.format('yesDelete')}
             autoFocusButton="cancel"
             onPrimaryAction={onDelete}
           >
-            Are you sure? This action cannot be undone.
+            {stringFormatter.format('areYouSure')}
           </AlertDialog>
         )}
       </DialogContainer>
       <DialogContainer onDismiss={() => setDuplicateAlertOpen(false)}>
         {duplicateAlertIsOpen && (
           <AlertDialog
-            title="Save and duplicate entry"
+            title={stringFormatter.format('saveAndDuplicateEntry')}
             tone="neutral"
-            cancelLabel="Cancel"
-            primaryActionLabel="Save and duplicate"
+            cancelLabel={stringFormatter.format('cancel')}
+            primaryActionLabel={stringFormatter.format('saveAndDuplicate')}
             autoFocusButton="primary"
             onPrimaryAction={onDuplicate}
           >
-            You have unsaved changes. Save this entry to duplicate it.
+            {stringFormatter.format('unsavedChangesDuplicate')}
           </AlertDialog>
         )}
       </DialogContainer>
@@ -783,7 +783,7 @@ export function CreateBranchDuringUpdateDialog(props: {
             <TextField
               value={branchName}
               onChange={setBranchName}
-              label="Branch name"
+              label={stringFormatter.format('branchName')}
               description={props.reason}
               autoFocus
               errorMessage={prettyErrorForCreateBranchMutation(error)}
@@ -803,7 +803,7 @@ export function CreateBranchDuringUpdateDialog(props: {
             {stringFormatter.format('cancel')}
           </Button>
           <Button isDisabled={isLoading} prominence="high" type="submit">
-            Create branch and save
+            {stringFormatter.format('createBranchAndSave')}
           </Button>
         </ButtonGroup>
       </form>
@@ -819,6 +819,8 @@ type ItemPageWrapperProps = {
 };
 
 function ItemPageWrapper(props: ItemPageWrapperProps) {
+  const stringFormatter = useLocalizedStringFormatter(l10nMessages);
+
   const collectionConfig = props.config.collections?.[props.collection];
   if (!collectionConfig) notFound();
   const format = useMemo(
@@ -961,7 +963,9 @@ function ItemPageWrapper(props: ItemPageWrapperProps) {
     return (
       <ItemPageShell {...props}>
         <PageBody>
-          <Notice tone="caution">Entry not found.</Notice>
+          <Notice tone="caution">
+            {stringFormatter.format('entryNotFound')}
+          </Notice>
         </PageBody>
       </ItemPageShell>
     );

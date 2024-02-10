@@ -1,6 +1,6 @@
 {
-  "key": "create",
-  "value": "Create",
+  "key": "createBranchAndSave",
+  "value": "Create branch and save",
   "notes": "",
   "type": "global"
 }

@@ -148,7 +148,7 @@ export function ArrayFieldInput<Element extends ComponentSchema>(
           }
           return (
             <Dialog>
-              <Heading>Edit item</Heading>
+              <Heading>{stringFormatter.format('editItem')}</Heading>
               <Content>
                 <Flex
                   id={formId}
@@ -340,10 +340,10 @@ export function ArrayFieldListView<Element extends ComponentSchema>(
             size="large"
             weight="medium"
           >
-            Empty list
+            {stringFormatter.format('emptyList')}
           </Text>
           <Text align="center" color="neutralTertiary">
-            Add the first item to see it here.
+            {stringFormatter.format('addFirstItem')}
           </Text>
         </Flex>
       )}
